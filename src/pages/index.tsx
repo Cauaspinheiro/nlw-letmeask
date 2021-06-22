@@ -1,7 +1,10 @@
 import Head from 'next/head'
+import Image from 'next/image'
+import { FC } from 'react'
+
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+const Home: FC = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -57,9 +60,17 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          <Image
+            src="/vercel.svg"
+            alt="Vercel Logo"
+            className={styles.logo}
+            width={283}
+            height={64}
+          />
         </a>
       </footer>
     </div>
   )
 }
+
+export default Home
