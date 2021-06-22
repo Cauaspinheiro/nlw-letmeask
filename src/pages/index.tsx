@@ -1,23 +1,24 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 
 import Button from '../components/Button'
 import styles from '../styles/pages/auth.module.scss'
 
-import { firebaseApp, firebaseAuth } from '../services/firebase'
+import { useAuthContext } from '../context/AuthContext'
 
 const Home: FC = () => {
   const router = useRouter()
 
-  const handleCreateRoom = useCallback(async () => {
-    const provider = new firebaseApp.auth.GoogleAuthProvider()
+  const { signInWithGoogle, user } = useAuthContext()
 
-    await firebaseAuth.signInWithPopup(provider)
+  const handleCreateRoom = async () => {
+    if (!user) {
+      await signInWithGoogle()
+    }
 
     router.push('/rooms/new')
-  }, [router])
-
+  }
 
   return (
     <div className={styles.container}>

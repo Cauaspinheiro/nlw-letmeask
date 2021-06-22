@@ -5,7 +5,11 @@ import { FC } from 'react'
 import Button from '../../components/Button'
 import styles from '../../styles/pages/auth.module.scss'
 
+import { useAuthContext } from '../../context/AuthContext'
+
 const NewRoom: FC = () => {
+  const { user } = useAuthContext()
+
   return (
     <div className={styles.container}>
       <aside>
@@ -31,6 +35,8 @@ const NewRoom: FC = () => {
               height="75"
             />
           </div>
+
+          <h1>{user?.name}</h1>
 
           <h2>Criar uma nova sala</h2>
 
