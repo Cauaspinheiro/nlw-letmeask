@@ -2,13 +2,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, FormEvent, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 
 import Button from '../../components/Button'
 import styles from '../../styles/pages/auth.module.scss'
 
+import illustrationSvg from '../../../public/images/illustration.svg'
+import logoSvg from '../../../public/images/logo.svg'
 import { useAuthContext } from '../../context/AuthContext'
-import illustrationSvg from '../../public/images/illustration.svg'
-import logoSvg from '../../public/images/logo.svg'
 import { firebaseDatabase } from '../../services/firebase'
 
 const NewRoom: FC = () => {
@@ -19,7 +20,7 @@ const NewRoom: FC = () => {
   const handleCreateRoom = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!newRoom.trim()) return
+    if (!newRoom.trim()) return toast.error('Digite o nome da sua sala!')
 
     const roomRef = firebaseDatabase.ref('rooms')
 
@@ -65,6 +66,8 @@ const NewRoom: FC = () => {
           </p>
         </div>
       </main>
+
+      <Toaster />
     </div>
   )
 }

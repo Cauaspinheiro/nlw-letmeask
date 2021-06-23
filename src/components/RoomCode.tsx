@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import toast from 'react-hot-toast'
 
 import styles from '../styles/components/room_code.module.scss'
 
@@ -11,6 +12,8 @@ export interface RoomCodeProps {
 
 const RoomCode: React.FC<RoomCodeProps> = (props) => {
   const copyRoomCode = () => {
+    toast.success('Copiado!')
+
     navigator.clipboard.writeText(props.code)
   }
 

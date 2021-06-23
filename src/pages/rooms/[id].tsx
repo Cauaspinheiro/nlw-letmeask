@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { FormEvent, Fragment, useEffect, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 
 import Button from '../../components/Button'
 import RoomCode from '../../components/RoomCode'
@@ -24,10 +25,17 @@ const RoomPage: React.FC = () => {
 
   const { id: roomId } = router.query
 
+  const setTextAndQuestions = (title: string, questions: Question[]) => {
+    setTitle(title)
+    setQuestions(questions)
+  }
+
   useEffect(() => {
     const roomRef = firebaseDatabase.ref(`rooms/${roomId}`)
 
     roomRef.on('value', (db) => {
+      if (!db.val()) return
+
       const room = db.val()
 
       const firebaseQuestions: FirebaseQuestions = room.questions || {}
@@ -41,44 +49,43 @@ const RoomPage: React.FC = () => {
         }
       )
 
-      setTitle(room.title)
-      setQuestions(parsedQuestions)
+      setTextAndQuestions(room.title, parsedQuestions)
     })
   }, [roomId])
 
-  const handleCreateNewQuestion = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleCreateNewQuestion = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
 
-    if (!newQuestion.trim()) return
+      if (!newQuestion.trim()) return toast.error('Digite uma pergunta!')
 
-    if (!user) return
+      if (!user) return toast.error('Você precisa estar logado para perguntar!')
 
-    const question = {
-      content: newQuestion,
-      author: user,
-      isHighlighted: false,
-      isAnswered: false,
-    }
+      const question = {
+        content: newQuestion,
+        author: user,
+        isHighlighted: false,
+        isAnswered: false,
+      }
 
-    await firebaseDatabase.ref(`rooms/${roomId}/questions`).push(question)
+      await firebaseDatabase.ref(`rooms/${roomId}/questions`).push(question)
 
-    setNewQuestion('')
-  }
+      setNewQuestion('')
+      toast.success('Pergunta enviada!')
+    },
+    [newQuestion, roomId, user]
+  )
 
   const buildFormFooter = () => {
     if (user) {
       return (
-        <Fragment>
-          <div className={styles.user_info}>
-            <div className={styles.avatar}>
-              <Image src={user.avatar} alt={user.name} width="44" height="44" />
-            </div>
-
-            <span>{user.name}</span>
+        <div className={styles.user_info}>
+          <div className={styles.avatar}>
+            <Image src={user.avatar} alt={user.name} width="44" height="44" />
           </div>
 
-          <Button type="submit">Enviar pergunta</Button>
-        </Fragment>
+          <span>{user.name}</span>
+        </div>
       )
     }
 
@@ -86,6 +93,14 @@ const RoomPage: React.FC = () => {
       <span>
         Para enviar uma pergunta, <button>faça seu login</button>
       </span>
+    )
+  }
+
+  if (!title) {
+    return (
+      <div className={styles.loading}>
+        <h1>Carregando</h1>
+      </div>
     )
   }
 
@@ -104,7 +119,7 @@ const RoomPage: React.FC = () => {
       <main>
         <div className={styles.room_title}>
           <h1>Sala {title}</h1>
-          {questions.length && <span>{questions.length} perguntas</span>}
+          <span>{questions.length} perguntas</span>
         </div>
 
         <form onSubmit={handleCreateNewQuestion}>
@@ -114,9 +129,17 @@ const RoomPage: React.FC = () => {
             onChange={(e) => setNewQuestion(e.target.value)}
           />
 
-          <div className={styles.form_footer}>{buildFormFooter()}</div>
+          <div className={styles.form_footer}>
+            {buildFormFooter()}
+
+            <Button type="submit" disabled={!user}>
+              Enviar pergunta
+            </Button>
+          </div>
         </form>
       </main>
+
+      <Toaster />
     </div>
   )
 }

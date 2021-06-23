@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { FC, FormEvent, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 
 import Button from '../components/Button'
 import styles from '../styles/pages/auth.module.scss'
@@ -29,12 +30,16 @@ const Home: FC = () => {
   const handleJoinRoom = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!roomKey.trim()) return
+    if (!roomKey.trim()) {
+      toast.dismiss()
+      return toast.error('Digite uma sala')
+    }
 
     const roomRef = firebaseDatabase.ref(`rooms/${roomKey}`).get()
 
     if (!(await roomRef).exists()) {
-      return alert('Essa sala não existe')
+      toast.dismiss()
+      return toast.error('Essa sala não existe')
     }
 
     router.push(`/rooms/${roomKey}`)
@@ -76,6 +81,8 @@ const Home: FC = () => {
           </form>
         </div>
       </main>
+
+      <Toaster />
     </div>
   )
 }
