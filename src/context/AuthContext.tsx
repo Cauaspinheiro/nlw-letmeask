@@ -37,10 +37,14 @@ const AuthContextProvider: FC = ({ children }) => {
 
   useEffect(() => {
     return firebaseAuth.onAuthStateChanged((user) => {
-      if (!user) throw new Error('MISSING USER FROM GOOGLE')
+      if (!user) {
+        return
+        //throw new Error('MISSING USER FROM GOOGLE')
+      }
 
       if (!user.displayName || !user.photoURL) {
-        throw new Error('MISSING USER INFO FROM GOOGLE ACCOUNT')
+        return
+        // throw new Error('MISSING USER INFO FROM GOOGLE ACCOUNT')
       }
 
       setUser({ id: user.uid, name: user.displayName, avatar: user.photoURL })
