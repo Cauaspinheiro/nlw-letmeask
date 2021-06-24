@@ -14,6 +14,15 @@
     > .logo {
       max-height: 45px;
     }
+
+    > div {
+      display: flex;
+      column-gap: 16px;
+
+      button {
+        height: 40px;
+      }
+    }
   }
 
   main {
@@ -103,11 +112,19 @@
         }
       }
     }
+
+    .question_list {
+      margin-top: 32px;
+    }
   }
 }
 
 .loading {
   display: flex;
+  flex-direction: column;
+
+  row-gap: 32px;
+
   align-items: center;
   justify-content: center;
   height: 100vh;

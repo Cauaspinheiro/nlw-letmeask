@@ -35,15 +35,19 @@ const Home: FC = () => {
       return toast.error('Digite uma sala')
     }
 
-    const roomRef = firebaseDatabase.ref(`rooms/${roomKey}`).get()
+    const roomRef = await firebaseDatabase.ref(`rooms/${roomKey}`).get()
 
-    if (!(await roomRef).exists()) {
+    if (!roomRef.exists()) {
       toast.dismiss()
       return toast.error('Essa sala não existe')
     }
 
+    if (roomRef.val().endedAt) return toast.error('Essa sala foi encerrada!')
+
     router.push(`/rooms/${roomKey}`)
   }
+
+  if (router.query.ref === 'roomEnded') toast.success('Sala encerrada!')
 
   return (
     <div className={styles.container}>
