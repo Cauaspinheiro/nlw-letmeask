@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { FormEvent, useCallback, useState } from 'react'
@@ -6,10 +7,10 @@ import toast, { Toaster } from 'react-hot-toast'
 import Button from '../../components/Button'
 import QuestionTile from '../../components/QuestionTile'
 import RoomCode from '../../components/RoomCode'
+import LogoSvg from '../../components/svg/LogoSvg'
 import questionStyles from '../../styles/components/question.module.scss'
 import styles from '../../styles/pages/rooms/[id].module.scss'
 
-import logoSvg from '../../../public/images/logo.svg'
 import { useAuthContext } from '../../context/AuthContext'
 import useRoom from '../../hooks/useRoom'
 import { firebaseDatabase } from '../../services/firebase'
@@ -83,9 +84,11 @@ const RoomPage: React.FC = () => {
   if (!title) {
     return (
       <div className={styles.loading}>
-        <Image src={logoSvg} alt="Let me ask" />
+        <motion.div layoutId="room-logo">
+          <LogoSvg />
+        </motion.div>
 
-        <h1>Carregando</h1>
+        <h3>Carregando...</h3>
       </div>
     )
   }
@@ -94,15 +97,25 @@ const RoomPage: React.FC = () => {
     <div className={styles.container}>
       <header>
         <div className={styles.content}>
-          <div className="logo">
-            <Image src={logoSvg} alt="Let me ask" />
-          </div>
+          <motion.div className="logo" layoutId="room-logo">
+            <LogoSvg />
+          </motion.div>
 
-          <RoomCode code={roomId?.toString() || ''} />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <RoomCode code={roomId?.toString() || ''} />
+          </motion.div>
         </div>
       </header>
 
-      <main>
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
         <div className={styles.room_title}>
           <h1>Sala {title}</h1>
           <span>{questions.length} perguntas</span>
@@ -164,7 +177,7 @@ const RoomPage: React.FC = () => {
             )
           })}
         </div>
-      </main>
+      </motion.main>
 
       <Toaster />
     </div>

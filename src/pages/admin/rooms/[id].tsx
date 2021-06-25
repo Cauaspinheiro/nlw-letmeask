@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -6,10 +7,10 @@ import toast, { Toaster } from 'react-hot-toast'
 import Button from '../../../components/Button'
 import QuestionsTile from '../../../components/QuestionTile'
 import RoomCode from '../../../components/RoomCode'
+import LogoSvg from '../../../components/svg/LogoSvg'
 import styles from '../../../styles/pages/rooms/[id].module.scss'
 
 import deleteSvg from '../../../../public/images/delete.svg'
-import logoSvg from '../../../../public/images/logo.svg'
 import useRoom from '../../../hooks/useRoom'
 import { firebaseDatabase } from '../../../services/firebase'
 
@@ -45,9 +46,11 @@ const AdminRoomPage: React.FC = () => {
   if (!title) {
     return (
       <div className={styles.loading}>
-        <Image src={logoSvg} alt="Let me ask" />
+        <motion.div layoutId="room-logo">
+          <LogoSvg />
+        </motion.div>
 
-        <h1>Carregando</h1>
+        <h3>Carregando...</h3>
       </div>
     )
   }
@@ -56,45 +59,54 @@ const AdminRoomPage: React.FC = () => {
     <div className={styles.container}>
       <header>
         <div className={styles.content}>
-          <div className="logo">
-            <Image src={logoSvg} alt="Let me ask" />
-          </div>
+          <motion.div className="logo" layoutId="room-logo">
+            <LogoSvg />
+          </motion.div>
 
-          <div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <RoomCode code={roomId?.toString() || ''} />
 
             <Button isOutlined onClick={handleEndRoom}>
               Encerrar sala
             </Button>
-          </div>
+          </motion.div>
         </div>
       </header>
 
-      <main>
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
         <div className={styles.room_title}>
           <h1>Sala {title}</h1>
           <span>{questions.length} perguntas</span>
         </div>
 
         <div className={styles.question_list}>
-          {questions.map((question, index) => {
+          {questions.map((question) => {
             return (
-              <QuestionsTile
-                content={question.content}
-                author={question.author}
-                key={index}
-              >
-                <button
-                  type="button"
-                  onClick={() => handleDeleteQuestion(question.id)}
+              <motion.div key={question.id} layoutId={question.id}>
+                <QuestionsTile
+                  content={question.content}
+                  author={question.author}
                 >
-                  <Image alt="Deletar pergunta" src={deleteSvg} />
-                </button>
-              </QuestionsTile>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteQuestion(question.id)}
+                  >
+                    <Image alt="Deletar pergunta" src={deleteSvg} />
+                  </button>
+                </QuestionsTile>
+              </motion.div>
             )
           })}
         </div>
-      </main>
+      </motion.main>
 
       <Toaster />
     </div>

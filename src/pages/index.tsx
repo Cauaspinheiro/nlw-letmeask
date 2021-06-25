@@ -1,14 +1,15 @@
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { FC, FormEvent, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 
 import Button from '../components/Button'
+import IllustrationSvg from '../components/svg/IllustrationSvg'
+import LogoSvg from '../components/svg/LogoSvg'
 import styles from '../styles/pages/auth.module.scss'
 
 import googleIconSvg from '../../public/images/google-icon.svg'
-import illustrationSvg from '../../public/images/illustration.svg'
-import logoSvg from '../../public/images/logo.svg'
 import { useAuthContext } from '../context/AuthContext'
 import { firebaseDatabase } from '../services/firebase'
 
@@ -53,7 +54,7 @@ const Home: FC = () => {
     <div className={styles.container}>
       <aside>
         <div className={styles.next_image}>
-          <Image src={illustrationSvg} alt="Let me Ask" />
+          <IllustrationSvg />
         </div>
         <strong>Crie sala de Q&amp;A ao vivo</strong>
         <p>Tire as dúvidas da sua audiência em tempo real</p>
@@ -61,9 +62,9 @@ const Home: FC = () => {
 
       <main>
         <div className={styles.main_content}>
-          <div className={styles.next_image}>
-            <Image src={logoSvg} alt="Let me Ask" />
-          </div>
+          <motion.div layoutId="initial-logo" className={styles.next_image}>
+            <LogoSvg />
+          </motion.div>
 
           <button onClick={handleCreateRoom} className={styles.create_room}>
             <div className={styles.next_image}>
@@ -74,7 +75,7 @@ const Home: FC = () => {
 
           <div className={styles.separator}>Ou entre em uma sala</div>
 
-          <form onSubmit={handleJoinRoom}>
+          <motion.form layoutId="initial-form" onSubmit={handleJoinRoom}>
             <input
               type="text"
               placeholder="Digite o código da sala"
@@ -82,7 +83,7 @@ const Home: FC = () => {
               onChange={(e) => setRoomKey(e.target.value)}
             />
             <Button type="submit">Entrar na sala</Button>
-          </form>
+          </motion.form>
         </div>
       </main>
 

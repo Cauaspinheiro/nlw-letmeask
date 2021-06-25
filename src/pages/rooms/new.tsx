@@ -1,14 +1,14 @@
-import Image from 'next/image'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, FormEvent, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 
 import Button from '../../components/Button'
+import IllustrationSvg from '../../components/svg/IllustrationSvg'
+import LogoSvg from '../../components/svg/LogoSvg'
 import styles from '../../styles/pages/auth.module.scss'
 
-import illustrationSvg from '../../../public/images/illustration.svg'
-import logoSvg from '../../../public/images/logo.svg'
 import { useAuthContext } from '../../context/AuthContext'
 import { firebaseDatabase } from '../../services/firebase'
 
@@ -17,6 +17,7 @@ const NewRoom: FC = () => {
   const { user } = useAuthContext()
 
   const router = useRouter()
+
   const handleCreateRoom = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -36,7 +37,7 @@ const NewRoom: FC = () => {
     <div className={styles.container}>
       <aside>
         <div className={styles.next_image}>
-          <Image src={illustrationSvg} alt="Let me Ask" />
+          <IllustrationSvg />
         </div>
         <strong>Crie sala de Q&amp;A ao vivo</strong>
         <p>Tire as dúvidas da sua audiência em tempo real</p>
@@ -44,13 +45,13 @@ const NewRoom: FC = () => {
 
       <main>
         <div className={styles.main_content}>
-          <div className={styles.next_image}>
-            <Image src={logoSvg} alt="Let me Ask" />
-          </div>
+          <motion.div layoutId="initial-logo" className={styles.next_image}>
+            <LogoSvg />
+          </motion.div>
 
           <h2>Criar uma nova sala</h2>
 
-          <form onSubmit={handleCreateRoom}>
+          <motion.form layoutId="initial-form" onSubmit={handleCreateRoom}>
             <input
               type="text"
               placeholder="Nome da sala"
@@ -59,7 +60,7 @@ const NewRoom: FC = () => {
             />
 
             <Button type="submit">Criar sala</Button>
-          </form>
+          </motion.form>
 
           <p>
             Quer entrar uma sala existente? <Link href="/">Clique Aqui</Link>
