@@ -1,3 +1,4 @@
+import cx from 'classnames'
 import Image from 'next/image'
 import React from 'react'
 
@@ -8,11 +9,23 @@ import User from '../entities/user'
 export interface QuestionTileProps {
   content: string
   author: User
+  isAnswered?: boolean
+  isHighlighted?: boolean
 }
 
-const QuestionTile: React.FC<QuestionTileProps> = (props) => {
+const QuestionTile: React.FC<QuestionTileProps> = ({
+  isAnswered = false,
+  isHighlighted = false,
+  ...props
+}) => {
   return (
-    <div className={styles.container}>
+    <div
+      className={cx(
+        styles.container,
+        { [styles.answered]: isAnswered },
+        { [styles.highlighted]: isHighlighted && !isAnswered }
+      )}
+    >
       <p>{props.content}</p>
 
       <footer>

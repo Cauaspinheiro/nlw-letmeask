@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { Fragment } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 
 import Button from '../../../components/Button'
@@ -10,6 +10,8 @@ import RoomCode from '../../../components/RoomCode'
 import LogoSvg from '../../../components/svg/LogoSvg'
 import styles from '../../../styles/pages/rooms/[id].module.scss'
 
+import answerSvg from '../../../../public/images/answer.svg'
+import checkSvg from '../../../../public/images/check.svg'
 import deleteSvg from '../../../../public/images/delete.svg'
 import useRoom from '../../../hooks/useRoom'
 import { firebaseDatabase } from '../../../services/firebase'
@@ -27,6 +29,18 @@ const AdminRoomPage: React.FC = () => {
       .update({ endedAt: new Date() })
 
     router.replace('/?ref=roomEnded', '/')
+  }
+
+  const handleMarkAsAnswered = async (questionId: string) => {
+    await firebaseDatabase
+      .ref(`rooms/${roomId}/questions/${questionId}`)
+      .update({ isAnswered: true })
+  }
+
+  const handleHighlightQuestion = async (questionId: string) => {
+    await firebaseDatabase
+      .ref(`rooms/${roomId}/questions/${questionId}`)
+      .update({ isHighlighted: true })
   }
 
   const handleDeleteQuestion = async (questionId: string) => {
@@ -94,7 +108,27 @@ const AdminRoomPage: React.FC = () => {
                 <QuestionsTile
                   content={question.content}
                   author={question.author}
+                  isAnswered={question.isAnswered}
+                  isHighlighted={question.isHighlighted}
                 >
+                  {!question.isAnswered && (
+                    <Fragment>
+                      <button
+                        type="button"
+                        onClick={() => handleMarkAsAnswered(question.id)}
+                      >
+                        <Image alt="Marcar como respondida" src={checkSvg} />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleHighlightQuestion(question.id)}
+                      >
+                        <Image alt="Dar destaque" src={answerSvg} />
+                      </button>
+                    </Fragment>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => handleDeleteQuestion(question.id)}
