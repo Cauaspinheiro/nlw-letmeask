@@ -114,11 +114,11 @@
     }
 
     .question_list {
-      margin-top: 32px;
+      margin: 32px 0px;
       display: flex;
       flex-direction: column;
 
-      row-gap: 8px;
+      row-gap: 12px;
     }
   }
 }
@@ -132,4 +132,43 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    header {
+      border-color: #444;
+      .content {
+        button {
+          background-color: #2d2d2d;
+          color: #f8f8f8;
+        }
+      }
+    }
+
+    main {
+      .room_title {
+        h1 {
+          color: #f8f8f8;
+        }
+      }
+
+      form {
+        textarea {
+          background-color: #2d2d2d;
+          color: #f8f8f8;
+
+          &::placeholder {
+            color: #adadad;
+          }
+        }
+
+        .form_footer {
+          span {
+            color: #f8f8f8 !important;
+          }
+        }
+      }
+    }
+  }
 }

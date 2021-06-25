@@ -33,6 +33,16 @@ const NewRoom: FC = () => {
     router.push(`/rooms/${firebaseRoom.key}`)
   }
 
+  const createRoomWithToast = (e: FormEvent<HTMLFormElement>) => {
+    const promise = handleCreateRoom(e)
+
+    toast.promise(promise, {
+      loading: 'Carregando...',
+      success: 'Sala Criada!',
+      error: 'Algo deu errado!',
+    })
+  }
+
   return (
     <div className={styles.container}>
       <aside>
@@ -51,7 +61,7 @@ const NewRoom: FC = () => {
 
           <h2>Criar uma nova sala</h2>
 
-          <motion.form layoutId="initial-form" onSubmit={handleCreateRoom}>
+          <motion.form layoutId="initial-form" onSubmit={createRoomWithToast}>
             <input
               type="text"
               placeholder="Nome da sala"

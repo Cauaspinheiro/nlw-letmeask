@@ -146,3 +146,30 @@
     }
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #29292e;
+
+    .main_content {
+      h2 {
+        color: #fff;
+      }
+
+      form input {
+        background: #29292e;
+
+        border-color: #f8f8f8;
+        color: #fff;
+
+        &::placeholder {
+          color: #cecece;
+        }
+      }
+    }
+
+    .separator {
+      color: #f8f8f8;
+    }
+  }
+}

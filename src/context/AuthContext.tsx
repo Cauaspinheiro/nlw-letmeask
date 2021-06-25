@@ -32,7 +32,7 @@ export function useAuthContext(): AuthContext {
   return value || ({} as AuthContext)
 }
 
-const AuthContextProvider: FC = ({ children }) => {
+export const AuthContextProvider: FC = ({ children }) => {
   const [user, setUser] = useState<User>()
 
   useEffect(() => {
@@ -71,5 +71,3 @@ const AuthContextProvider: FC = ({ children }) => {
     </Context.Provider>
   )
 }
-
-export default AuthContextProvider

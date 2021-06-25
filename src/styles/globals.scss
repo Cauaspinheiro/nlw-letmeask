@@ -23,3 +23,10 @@ textarea {
   align-items: center;
   justify-content: center;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #29292e;
+    color: #f8f8f8;
+  }
+}
