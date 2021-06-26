@@ -14,6 +14,10 @@
 
 <br>
 
+## 💻 Site
+
+Você pode acessar o projeto via http://nlw-06-letmeask.vercel.app/
+
 ## 🧪 Tecnologias
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
